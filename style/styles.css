@@ -1,0 +1,74 @@
+#geometry-area{
+    text-align: center;
+}
+
+#alert-message-wrap{
+    position: absolute;
+    top: 10px;
+    z-index: 1000;
+    display: none;
+    text-align: center;
+}
+
+#bottom-panel{
+    position: absolute;
+    bottom: 0;
+}
+
+#tools-area{
+    background-color:#E0E0E0;
+    padding: 10px;
+}
+
+#bottom-panel-arrow-area{
+    background-color: #424242;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+}
+
+#geometry-field{
+    width: 100%;
+    max-width: 100%;
+    min-height: 150px;
+    height:150px;
+}
+
+#draw-btn{
+
+}
+
+#map{
+    background: #eee;
+    height: 100vh;
+}
+
+#bottom-panel-arrow{
+    text-align: center;
+    color: white;
+}
+
+.setting-input{
+    text-align: left;
+    margin-left: 20%;
+}
+
+.center-align{
+    text-align: center;
+}
+
+.radio-input{
+    margin-left: 20px;
+}
+
+#copyright{
+    text-align: center;
+}
+
+#copyright p{
+    margin: 10px 0 0 0;
+}
+
+a{
+    text-decoration: none !important;
+}

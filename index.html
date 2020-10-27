@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Map Tools</title>
+    <meta name="description" content="Map tools for drawing geometries in PolyLine and WKT format">
+    <meta name="keywords" content="WKT,PolyLine,geometry,postgis,map">
+    <meta name="author" content="Behzad Kazemi">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="style/styles.css" rel="stylesheet" type="text/css">
+
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/build/ol.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div id="alert-message-wrap" class="col-sm-12 col-x-12 col-md-12 col-lg-12">
+    <div class="col-sm-3 col-x-3 col-md-3 col-lg-3"></div>
+    <div class="col-sm-6 col-x-6 col-md-6 col-lg-6">
+        <div class="alert alert-danger fade in" id="alert-message"></div>
+    </div>
+</div>
+
+
+<div id="map" class="col-sm-12 col-x-12 col-md-12 col-lg-12"></div>
+
+<div id="bottom-panel" class="col-sm-12 col-x-12 col-md-12 col-lg-12">
+
+    <!-- Panel Toggle -->
+    <div id="bottom-panel-toggle" class="col-sm-12 col-x-12 col-md-12 col-lg-12">
+        <div class="col-sm-2 col-x-2 col-md-2 col-lg-2"></div>
+        <div id="bottom-panel-arrow-area" class="col-sm-8 col-x-8 col-md-8 col-lg-8">
+            <i class="glyphicon glyphicon-chevron-down" id="bottom-panel-arrow"></i>
+        </div>
+    </div>
+
+    <!-- Tools Panel -->
+    <div id="tools-area-wrap" class="col-sm-12 col-x-12 col-md-12 col-lg-12">
+        <div class="col-sm-2 col-x-2 col-md-2 col-lg-2"></div>
+
+        <div id="tools-area" class="col-sm-8 col-x-8 col-md-8 col-lg-8">
+            <!-- Geometry Field -->
+            <div class="col-sm-6 col-x-6 col-md-6 col-lg-6">
+                <textarea type="text" id="geometry-field" class="form-control" placeholder="WKT or PolyLine"></textarea>
+            </div>
+
+            <!-- Settings Area -->
+            <div id="settings-area" class="col-sm-6 col-x-6 col-md-6 col-lg-6">
+                <br>
+                <p class="setting-input">
+                    <span>Geometry:</span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="geometryType" value="WKT">
+                            WKT
+                        </label>
+                    </span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="geometryType" value="PolyLine">
+                            PolyLine
+                        </label>
+                    </span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="geometryType" value="LngLat" checked>
+                            Lng,Lat
+                        </label>
+                    </span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="geometryType" value="LatLng">
+                            Lat,Lng
+                        </label>
+                    </span>
+                </p>
+                <p class="setting-input">
+                    <span>SRID:</span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="srid" value="4326" checked>
+                            EPSG:4326
+                        </label>
+                    </span>
+                    <span class="radio-input">
+                        <label>
+                            <input type="radio" name="srid" value="3857">
+                            EPSG:3857
+                        </label>
+                    </span>
+                </p>
+                <p class="setting-input">
+                    <input type="checkbox" name="clear" checked>
+                    Clear Previous
+                </p>
+                <br>
+                <p class="center-align">
+                    <button id="draw-btn" class="btn btn-primary">Draw</button>
+                </p>
+            </div>
+
+            <div id="copyright" class="col-sm-12 col-x-12 col-md-12 col-lg-12">
+                <p>
+                    <a href="https://github.com/behizz/map-tools">
+                        <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1"
+                             width="24" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                        </svg>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="js/MapTools.js"></script>
+<script src="js/scripts.js"></script>
+</html>
