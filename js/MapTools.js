@@ -23,6 +23,8 @@ class MapTools {
                 zoom: 17
             })
         });
+
+        this.geometryLayers = [];
     }
 
     drawWKT(wktGeometry, sourceProjection, clearPreviousChecked) {
@@ -32,24 +34,20 @@ class MapTools {
             featureProjection: 'EPSG:3857'
         });
 
-        if(clearPreviousChecked){
-            this.map.removeLayer(this.geometryLayer);
-            this.geometryLayer = null;
+        if (clearPreviousChecked) {
+            this.clearPreviousLayers();
         }
 
-        if(this.geometryLayer != null) {
-            this.geometryLayer.getSource().addFeature(feature);
-        }
-        else {
-            this.geometryLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [feature]
-                }),
-                style: MapTools.getStyleByWKTType(wktGeometry)
-            });
+        var geometryLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [feature]
+            }),
+            style: MapTools.getStyleByWKTType(wktGeometry)
+        });
 
-            this.map.addLayer(this.geometryLayer);
-        }
+        this.geometryLayers.push(geometryLayer);
+        this.map.addLayer(geometryLayer);
+
 
         this.map.getView().fit(MapTools.transformWKTGeometry(wktGeometry, sourceProjection, 'EPSG:3857'), this.map.getSize());
     }
@@ -67,8 +65,7 @@ class MapTools {
                     })
                 })
             })
-        }
-        else {
+        } else {
             style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: '#001bce',
@@ -81,9 +78,8 @@ class MapTools {
     }
 
     drawPolyLine(polyline, clearPreviousChecked) {
-        if(clearPreviousChecked){
-            this.map.removeLayer(this.geometryLayer);
-            this.geometryLayer = null;
+        if (clearPreviousChecked) {
+            this.clearPreviousLayers();
         }
 
         var geometry = MapTools.convertPolyLineToGeometry(polyline);
@@ -91,23 +87,20 @@ class MapTools {
             geometry: geometry
         });
 
-        if(this.geometryLayer != null){
-            this.geometryLayer.getSource().addFeature(feature);
-        }
-        else{
-            this.geometryLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [feature]
-                }),
-                style: new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: '#001bce',
-                        width: 4
-                    })
+        var geometryLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [feature]
+            }),
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#001bce',
+                    width: 4
                 })
-            });
-            this.map.addLayer(this.geometryLayer);
-        }
+            })
+        });
+
+        this.geometryLayers.push(geometryLayer);
+        this.map.addLayer(geometryLayer);
 
         this.map.getView().fit(geometry, this.map.getSize());
     }
@@ -124,5 +117,12 @@ class MapTools {
         var wktFormat = new ol.format.WKT();
         var geometry = wktFormat.readGeometry(wktGeometry);
         return geometry.transform(sourceProjection, destinationProjection);
+    }
+
+    clearPreviousLayers() {
+        for (var i = 0; i < this.geometryLayers.length; i++) {
+            this.map.removeLayer(this.geometryLayers[i]);
+        }
+        this.geometryLayers = [];
     }
 }
